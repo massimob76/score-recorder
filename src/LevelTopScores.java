@@ -1,29 +1,57 @@
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 
 public class LevelTopScores {
 	
 	private final int MAX_TOP_SCORES = 15;
 	
-	private final HashMap<Integer, Integer> scoresByUserId = new HashMap<Integer, Integer>();
-	private final TreeMap<Integer, Integer> scoresByScore = new TreeMap<Integer, Integer>();
+	private final LinkedList<Score> topScores = new LinkedList<Score>();
 	
-	public void record(int userId, int score) {
-		Integer oldScore = scoresByUserId.get(userId);
-		if ((oldScore==null)||(oldScore.compareTo(score)==-1)) {
-			this.scoresByUserId.put(userId, score);
-			this.scoresByScore.put(score, userId);
+	private void removeDuplicatedUser(ListIterator<Score> iterator, int userId) {
+		while(iterator.hasNext()) {
+			Score currentScore = iterator.next();
+			if (currentScore.getUserId() == userId) {
+				iterator.remove();
+				return;
+			}
 		}
+		
 	}
 	
+	public void record(int userId, int score) {
+		ListIterator<Score> iterator = topScores.listIterator();
+		
+		while (iterator.hasNext()) {
+			Score currentScore = iterator.next();
+			if (currentScore.getScore() <= score) {
+				iterator.previous();
+				iterator.add(new Score(score, userId));
+				removeDuplicatedUser(iterator, userId);
+				removeOverflow();
+				return;
+			}
+			if (currentScore.getUserId() == userId) return; // user already recorded
+		}
+		
+		iterator.add(new Score(score, userId));
+		removeOverflow();
+	}
+	
+	private void removeOverflow() {
+		if (topScores.size() > MAX_TOP_SCORES) topScores.removeLast();
+	}
+
 	public String toCSVString() {
 		StringBuilder sb = new StringBuilder();
 		
-		for (Integer userId: scoresByUserId.keySet()) {
-			sb.append(userId.toString());
+		Iterator<Score> iterator = topScores.iterator();
+		while (iterator.hasNext()) {
+			Score score = iterator.next();
+			sb.append(score.getUserId());
 			sb.append("=");
-			sb.append(scoresByUserId.get(userId).toString());
+			sb.append(score.getScore());
 			sb.append(",");
 		}
 		

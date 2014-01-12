@@ -41,5 +41,22 @@ public class LevelTopScoresTest {
 		iut.record(8, 20);
 		assertEquals("15=123,8=20,12=15", iut.toCSVString());
 	}
+	
+	@Test
+	public void scoreListWithManySameScores() {
+		iut.record(123, 150);
+		iut.record(14, 150);
+		iut.record(123, 150);
+		iut.record(127, 150);
+		assertEquals("127=150,123=150,14=150", iut.toCSVString());
+	}
+	
+	@Test
+	public void scoreListShouldContainNoMoreThan15Scores() {
+		for (int i = 0; i < 20; i++) {
+			iut.record(i, i);
+		}
+		assertEquals(15, iut.toCSVString().split(",").length);
+	}
 
 }
