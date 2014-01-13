@@ -3,7 +3,6 @@ import java.util.Date;
 
 public class Clock {
 	
-	
 	private final long timeout;
 	
 	public Clock(int timeout) {
