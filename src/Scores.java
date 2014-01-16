@@ -1,15 +1,16 @@
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Scores {
 	
-	private HashMap<Integer, LevelTopScores> scores = new HashMap<Integer, LevelTopScores>();
+	private ConcurrentHashMap<Integer, LevelTopScores> scores = new ConcurrentHashMap<Integer, LevelTopScores>();
 
 	public void post(int userId, int level, int score) {
 		LevelTopScores levelTopScores = scores.get(level);
 		if (levelTopScores == null) {
 			levelTopScores = new LevelTopScores();
-			scores.put(level, levelTopScores);
+			LevelTopScores previousTopScores = scores.putIfAbsent(level, levelTopScores);
+			if (previousTopScores != null) levelTopScores = previousTopScores;
 		}
 		levelTopScores.record(userId, score);
 	}
