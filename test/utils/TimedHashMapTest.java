@@ -1,16 +1,19 @@
+package utils;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import utils.TimedHashMap;
 
-public class CacheTest {
+
+public class TimedHashMapTest {
 	
-	private CachedMap<String, String> iut;
+	private TimedHashMap<String, String> iut;
 	
 	@Before
 	public void setUp() {
-		iut = new CachedMap<String, String>(4);
+		iut = new TimedHashMap<String, String>(4);
 	}
 	
 	@Test
@@ -37,21 +40,12 @@ public class CacheTest {
 	}
 	
 	@Test
-	public void sizeShouldReturnTheCorrectValue() {
-		iut.put("key1", "value");
-		iut.put("key2", "value");
-		iut.put("key3", "value");
-		assertEquals(3, iut.size());
-	}
-	
-	@Test
-	public void expiredItemsShouldBeRemovedFromTheCache() throws InterruptedException {
-		for (int i = 0; i < 10; i++) {
-			iut.put("key" + i, "value");
-			Thread.sleep(1);
-			System.gc();
-		}
-		assertTrue(iut.size() < 10);
+	public void expiredItemsShouldBeRemovedFromTheMap() throws InterruptedException {
+		iut.put("key", "value");
+		assertNotNull(iut.get("key"));
+		Thread.sleep(10);
+		iut.put("last", "value");
+		assertNull(iut.get("key"));
 	}
 
 }

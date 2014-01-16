@@ -3,6 +3,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import utils.TimedHashMap;
+
 
 public class LoginTest {
 	
@@ -10,7 +12,7 @@ public class LoginTest {
 	
 	@Before
 	public void setUp() {
-		login = new Login(new CachedMap<String, Integer>(4));
+		login = new Login(new TimedHashMap<String, Integer>(4));
 	}
 	
 	@Test

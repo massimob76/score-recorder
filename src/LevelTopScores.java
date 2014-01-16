@@ -1,6 +1,8 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class LevelTopScores {
@@ -8,17 +10,6 @@ public class LevelTopScores {
 	private final int MAX_TOP_SCORES = 15;
 	
 	private final LinkedList<Score> topScores = new LinkedList<Score>();
-	
-	private void removeDuplicatedUser(ListIterator<Score> iterator, int userId) {
-		while(iterator.hasNext()) {
-			Score currentScore = iterator.next();
-			if (currentScore.getUserId() == userId) {
-				iterator.remove();
-				return;
-			}
-		}
-		
-	}
 	
 	public void record(int userId, int score) {
 		ListIterator<Score> iterator = topScores.listIterator();
@@ -37,6 +28,17 @@ public class LevelTopScores {
 		
 		iterator.add(new Score(score, userId));
 		removeOverflow();
+	}
+	
+	private void removeDuplicatedUser(ListIterator<Score> iterator, int userId) {
+		while(iterator.hasNext()) {
+			Score currentScore = iterator.next();
+			if (currentScore.getUserId() == userId) {
+				iterator.remove();
+				return;
+			}
+		}
+		
 	}
 	
 	private void removeOverflow() {

@@ -1,18 +1,20 @@
 import java.util.UUID;
 
+import utils.TimedHashMap;
+
 
 public class Login {
 	
 	private static final int TEN_MIN_IN_MILLIS = 10 * 60 * 1000;
 	
-	private final CachedMap<String, Integer> sessions;
+	private final TimedHashMap<String, Integer> sessions;
 	
 	public Login() {
-		sessions = new CachedMap<String, Integer>(TEN_MIN_IN_MILLIS);
+		sessions = new TimedHashMap<String, Integer>(TEN_MIN_IN_MILLIS);
 	}
 	
-	Login(CachedMap<String, Integer> cachedMap) {
-		this.sessions = cachedMap;
+	Login(TimedHashMap<String, Integer> timedHashMap) {
+		this.sessions = timedHashMap;
 	}
 	
 	public String getSessionKey(Integer userId) {
