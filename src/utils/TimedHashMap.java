@@ -2,10 +2,14 @@ package utils;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-// Provides a very basic implementation of a map (only put and get methods)
-// Elements are automatically removed when expired.
-// An element is considered expired when the elapsed time between its creation time and the current time is greater than the timeout.
-// The expired element will be removed at the next insertion or get operation.
+/**
+ * Provides a very basic implementation of a map (only put and get methods)
+ * Elements are automatically removed when expired.
+ * 
+ * An element is considered expired when the elapsed time between its creation time 
+ * and the current time is greater than the timeout.
+ * The expired element will be removed at the next insertion or get operation.
+ */
 
 public class TimedHashMap<K, V> {
 
@@ -18,10 +22,11 @@ public class TimedHashMap<K, V> {
 		clock = new Clock(timeout);
 	}
 
-	public void put(K key, V value) {
-		map.put(key, value);
+	public V put(K key, V value) {
+		V previousValue = map.put(key, value);
 		deque.offerFirst(new TimedKey(key));
 		cleanExpired();
+		return previousValue;
 	}
 	
 	public V get(K key) {
