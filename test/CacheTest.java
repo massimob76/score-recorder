@@ -32,6 +32,11 @@ public class CacheTest {
 	}
 	
 	@Test
+	public void shouldReturnNullWhenAnItemDoesNotExists() {
+		assertNull(iut.get("notexistent"));
+	}
+	
+	@Test
 	public void sizeShouldReturnTheCorrectValue() {
 		iut.put("key1", "value");
 		iut.put("key2", "value");

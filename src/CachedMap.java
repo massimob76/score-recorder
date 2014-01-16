@@ -26,7 +26,7 @@ public class CachedMap<K, V> {
 	
 	public V get(K key) {
 		ValueAndTime valueAndTime = map.get(key);
-		if (clock.isExpired(valueAndTime.createdAt)) return null;
+		if (valueAndTime == null || clock.isExpired(valueAndTime.createdAt)) return null;
 		return valueAndTime.value;
 	}
 	

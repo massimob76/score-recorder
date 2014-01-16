@@ -10,7 +10,7 @@ public class LoginTest {
 	
 	@Before
 	public void setUp() {
-		login = new Login();
+		login = new Login(new CachedMap<String, Integer>(4));
 	}
 	
 	@Test
@@ -31,6 +31,15 @@ public class LoginTest {
 	@Test
 	public void getUserIdShouldReturnNullWhenTheSessionDoesNotExists() {
 		String sessionKey = "notexistent";
+		assertNull(login.getUserId(sessionKey));
+	}
+	
+	@Test
+	public void getUserIdShouldReturnNullWhenTheSessionIsExpired() throws InterruptedException {
+		Integer userId = 123;
+		String sessionKey = login.getSessionKey(userId);
+		assertEquals(userId, login.getUserId(sessionKey));
+		Thread.sleep(5);
 		assertNull(login.getUserId(sessionKey));
 	}
 
