@@ -27,6 +27,13 @@ public class LevelTopScoresTest {
 	}
 	
 	@Test
+	public void shouldRecordTwoNewScore() {
+		iut.record(1, 12);
+		iut.record(2, 10);
+		assertEquals("1=12,2=10", iut.toCSVString());
+	}
+	
+	@Test
 	public void highestScorePerUserOnlyShouldBeReturned() {
 		iut.record(123, 12);
 		iut.record(123, 150);
