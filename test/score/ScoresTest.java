@@ -1,16 +1,19 @@
+package score;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import score.ScoresBoard;
+
 
 public class ScoresTest {
 	
-	private Scores iut;
+	private ScoresBoard iut;
 	
 	@Before
 	public void setUp() {
-		iut = new Scores();
+		iut = new ScoresBoard();
 	}
 	
 	@Test

@@ -1,22 +1,24 @@
+package score;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class Scores {
+
+public class ScoresBoard {
 	
-	private ConcurrentHashMap<Integer, LevelTopScores> scores = new ConcurrentHashMap<Integer, LevelTopScores>();
+	private ConcurrentHashMap<Integer, LevelScores> scores = new ConcurrentHashMap<Integer, LevelScores>();
 
 	public void post(int userId, int level, int score) {
-		LevelTopScores levelTopScores = scores.get(level);
+		LevelScores levelTopScores = scores.get(level);
 		if (levelTopScores == null) {
-			levelTopScores = new LevelTopScores();
-			LevelTopScores previousTopScores = scores.putIfAbsent(level, levelTopScores);
+			levelTopScores = new LevelScores();
+			LevelScores previousTopScores = scores.putIfAbsent(level, levelTopScores);
 			if (previousTopScores != null) levelTopScores = previousTopScores;
 		}
 		levelTopScores.record(userId, score);
 	}
 	
 	public String retrieve(int level) {
-		LevelTopScores levelTopScores = scores.get(level);
+		LevelScores levelTopScores = scores.get(level);
 		if (levelTopScores == null) return "";
 		return levelTopScores.toCSVString();
 	}

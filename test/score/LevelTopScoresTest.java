@@ -1,16 +1,19 @@
+package score;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import score.LevelScores;
+
 
 public class LevelTopScoresTest {
 	
-	private LevelTopScores iut;
+	private LevelScores iut;
 	
 	@Before
 	public void setUp() {
-		iut = new LevelTopScores();
+		iut = new LevelScores();
 	}
 	
 	@Test
