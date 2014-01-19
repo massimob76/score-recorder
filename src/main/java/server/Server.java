@@ -19,14 +19,17 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class Server {
 	
+	private static final int PORT = 8081;
+	
 	private static Login login = new Login();
 	private static ScoresBoard scoresBoard = new ScoresBoard();
 	
 	public static void start() throws IOException {
-		HttpServer server = HttpServer.create(new InetSocketAddress(8081),0);
+		HttpServer server = HttpServer.create(new InetSocketAddress(PORT),0);
 		server.createContext("/", new Handler());
 		server.setExecutor(null);
 		server.start();
+		System.out.println("listening on port: " + PORT);
 	}
 	
 	private static class Handler implements HttpHandler {
