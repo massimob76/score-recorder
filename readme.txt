@@ -15,3 +15,4 @@ Score Recorder test:
   A more granular locking level or use of atomic operation would be opportune.
   Also a minimum score barrier would be advantageous since once the score board gets stable 
   there should be very few post-a-score that are actually managing to change the top scores board.
+
