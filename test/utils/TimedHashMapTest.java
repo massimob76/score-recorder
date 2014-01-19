@@ -13,7 +13,8 @@ public class TimedHashMapTest {
 	
 	@Before
 	public void setUp() {
-		iut = new TimedHashMap<String, String>(4);
+		Timer timer = new TimerImpl(4);
+		iut = new TimedHashMap<String, String>(timer);
 	}
 	
 	@Test

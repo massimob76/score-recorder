@@ -2,6 +2,8 @@ package login;
 import java.util.UUID;
 
 import utils.TimedHashMap;
+import utils.Timer;
+import utils.TimerImpl;
 
 
 public class Login {
@@ -11,7 +13,8 @@ public class Login {
 	private final TimedHashMap<String, Integer> sessions;
 	
 	public Login() {
-		sessions = new TimedHashMap<String, Integer>(TEN_MIN_IN_MILLIS);
+		Timer timer = new TimerImpl(TEN_MIN_IN_MILLIS);
+		sessions = new TimedHashMap<String, Integer>(timer);
 	}
 	
 	Login(TimedHashMap<String, Integer> timedHashMap) {

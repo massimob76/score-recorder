@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import utils.TimedHashMap;
+import utils.TimerImpl;
 
 
 public class LoginTest {
@@ -14,7 +15,8 @@ public class LoginTest {
 	
 	@Before
 	public void setUp() {
-		login = new Login(new TimedHashMap<String, Integer>(4));
+		TimedHashMap<String, Integer> timedHashMap = new TimedHashMap<String, Integer>(new TimerImpl(4));
+		login = new Login(timedHashMap);
 	}
 	
 	@Test

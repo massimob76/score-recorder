@@ -16,10 +16,10 @@ public class TimedHashMap<K, V> {
 	private ConcurrentHashMap<K, V> map = new ConcurrentHashMap<K, V>();
 	private ConcurrentLinkedDeque<TimedKey> deque = new ConcurrentLinkedDeque<TimedKey>();
 	
-	private final Clock clock;
+	private final Timer timer;
 	
-	public TimedHashMap(int timeout) {
-		clock = new Clock(timeout);
+	public TimedHashMap(Timer timer) {
+		this.timer = timer;
 	}
 
 	public V put(K key, V value) {
@@ -51,12 +51,12 @@ public class TimedHashMap<K, V> {
 		private final K key;
 		
 		public TimedKey(K key) {
-			this.createdAt = clock.getCurrent();
+			this.createdAt = timer.getCurrent();
 			this.key = key;
 		}
 		
 		public boolean isExpired() {
-			return clock.isExpired(createdAt);
+			return timer.isExpired(createdAt);
 		}
 	}
 

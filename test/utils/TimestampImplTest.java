@@ -3,16 +3,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import utils.Clock;
+import utils.TimerImpl;
 
 
-public class ClockTest {
+public class TimestampImplTest {
 	
-	private Clock clock;
+	private TimerImpl clock;
 	
 	@Test
 	public void isExpiredWorksCorrectly() throws InterruptedException {
-		clock = new Clock(4);
+		clock = new TimerImpl(4);
 		long currentTime = clock.getCurrent();
 		assertFalse(clock.isExpired(currentTime));
 		Thread.sleep(5);
