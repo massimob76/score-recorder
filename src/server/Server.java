@@ -56,13 +56,9 @@ public class Server {
 				case "score":
 					int score = getScoreFromRequestBody(httpExchange.getRequestBody());
 					levelId = Integer.parseInt(m.group(1));
-					String query = uri.getQuery();
-					String sessionKey = query.split("=")[1];
+					String sessionKey = getSessionKeyForQueryParams(uri);
 					userId = login.getUserId(sessionKey);
-					if (userId == null) { // expired or not existent session
-						send404(httpExchange);
-						return;
-					} else {
+					if (userId != null) { // considering only valid sessions
 						scoresBoard.post(userId, levelId, score);
 					}
 					response = "";
@@ -82,6 +78,11 @@ public class Server {
 			
 		}
 		
+		private String getSessionKeyForQueryParams(URI uri) {
+			String query = uri.getQuery();
+			return query.split("=")[1];
+		}
+
 		private int getScoreFromRequestBody(InputStream requestBody) throws IOException {
 			InputStreamReader isr = new InputStreamReader(requestBody);
 			BufferedReader br = new BufferedReader(isr);
