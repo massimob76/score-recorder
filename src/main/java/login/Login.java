@@ -1,18 +1,17 @@
 package login;
 import java.util.UUID;
 
-import utils.TimedHashMap;
 import utils.Timer;
 import utils.TimerImpl;
 
 
 public class Login {
 		
-	private final TimedHashMap<String, Integer> sessions;
+	private final SessionsManager sessions;
 	
 	public Login(int timeout) {
 		Timer timer = new TimerImpl(timeout);
-		sessions = new TimedHashMap<String, Integer>(timer);
+		sessions = new SessionsManager(timer);
 	}
 	
 	public String getSessionKey(Integer userId) {
