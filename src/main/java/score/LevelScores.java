@@ -1,45 +1,65 @@
 package score;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LevelScores {
 	
-	private final int MAX_TOP_SCORES = 15;
+	private static final int MAX_SCORES = 15;
 	
-	private final LinkedList<Score> topScores = new LinkedList<Score>();
-
-	public synchronized void record(int userId, int score) {
-		ListIterator<Score> iterator = topScores.listIterator();
+	private final ConcurrentSkipListSet<UserScore> scores = new ConcurrentSkipListSet<UserScore>();
+    private final AtomicInteger counter = new AtomicInteger();
+    private UserScore minimumUserScore;
+	
+	public void record(int userId, int score) {
 		
-		while (iterator.hasNext()) {
-			Score currentScore = iterator.next();
-			if (currentScore.getScore() <= score) {
-				iterator.previous();
-				iterator.add(new Score(score, userId));
-				removeDuplicatedUser(iterator, userId);
-				removeOverflow();
-				return;
-			}
-			if (currentScore.getUserId() == userId) return; // user already recorded
+		UserScore newUserScore = new UserScore(userId, score);
+		
+		if (minimumUserScore != null 
+				&& newUserScore.compareTo(minimumUserScore) <= 0) return;
+		
+		UserScore oldUserScore = findIfUserAlreadyPresent(userId);
+		
+		if (oldUserScore == null) {
+			
+			if (scores.add(newUserScore)) counter.incrementAndGet();
+			
+		} else if (oldUserScore.compareTo(newUserScore) < 0) {
+			
+			if (scores.add(newUserScore) && !scores.remove(oldUserScore)) 
+				counter.incrementAndGet();
 		}
 		
-		iterator.add(new Score(score, userId));
-		removeOverflow();
+		removeOverflowAndSetMinimumUserScore();
+
 	}
 
 
-	public synchronized String toCSVString() {
+	private UserScore findIfUserAlreadyPresent(int userId) {
+		Iterator<UserScore> iterator = scores.iterator();
+		
+		while(iterator.hasNext()) {
+			UserScore userScore = iterator.next();
+			if (userScore.getUserId() == userId) return userScore;
+		}
+		
+		return null;
+	}
+
+
+	public String toCSVString() {
+		
 		StringBuilder sb = new StringBuilder();
 		
-		Iterator<Score> iterator = topScores.iterator();
+		Iterator<UserScore> iterator = scores.descendingIterator();
+		
 		while (iterator.hasNext()) {
-			Score score = iterator.next();
-			sb.append(score.getUserId());
+			UserScore userScore = iterator.next();
+			sb.append(userScore.getUserId());
 			sb.append("=");
-			sb.append(score.getScore());
+			sb.append(userScore.getScore());
 			sb.append(",");
 		}
 		
@@ -48,20 +68,11 @@ public class LevelScores {
 		return sb.toString();
 	}
 	
-	
-	private void removeDuplicatedUser(ListIterator<Score> iterator, int userId) {
-		while(iterator.hasNext()) {
-			Score currentScore = iterator.next();
-			if (currentScore.getUserId() == userId) {
-				iterator.remove();
-				return;
-			}
+	private void removeOverflowAndSetMinimumUserScore() {
+		if (counter.compareAndSet(MAX_SCORES + 1, MAX_SCORES)) {
+			scores.pollFirst();
+			minimumUserScore = scores.first();
 		}
-		
-	}
-	
-	private void removeOverflow() {
-		if (topScores.size() > MAX_TOP_SCORES) topScores.removeLast();
 	}
 
 }

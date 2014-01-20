@@ -7,7 +7,7 @@ import org.junit.Test;
 import score.LevelScores;
 
 
-public class LevelTopScoresTest {
+public class LevelScoresTest {
 	
 	private LevelScores iut;
 	
@@ -41,6 +41,7 @@ public class LevelTopScoresTest {
 		iut.record(123, 12);
 		iut.record(123, 150);
 		iut.record(123, 120);
+		iut.record(123, 150);
 		assertEquals("123=150", iut.toCSVString());
 	}
 	
