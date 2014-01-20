@@ -57,6 +57,7 @@ public class RequestHandler implements HttpHandler {
 				userId = login.getUserId(sessionKey);
 				if (userId == null) {
 					sendNotAuthorized(httpExchange);
+					return;
 				} else {
 					scoreBoard.post(userId, levelId, score);
 				}
