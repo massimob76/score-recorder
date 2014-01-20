@@ -3,7 +3,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 
-public class ScoresBoard {
+public class ScoreBoard {
 	
 	private ConcurrentHashMap<Integer, LevelScores> scores = new ConcurrentHashMap<Integer, LevelScores>();
 

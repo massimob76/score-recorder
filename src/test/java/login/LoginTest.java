@@ -5,18 +5,15 @@ import login.Login;
 import org.junit.Before;
 import org.junit.Test;
 
-import utils.TimedHashMap;
-import utils.TimerImpl;
-
-
 public class LoginTest {
 	
 	private Login login;
 	
+	private static final int FOUR_MILLIS = 4;
+	
 	@Before
 	public void setUp() {
-		TimedHashMap<String, Integer> timedHashMap = new TimedHashMap<String, Integer>(new TimerImpl(4));
-		login = new Login(timedHashMap);
+		login = new Login(FOUR_MILLIS);
 	}
 	
 	@Test

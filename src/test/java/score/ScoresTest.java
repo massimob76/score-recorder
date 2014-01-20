@@ -4,16 +4,16 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import score.ScoresBoard;
+import score.ScoreBoard;
 
 
 public class ScoresTest {
 	
-	private ScoresBoard iut;
+	private ScoreBoard iut;
 	
 	@Before
 	public void setUp() {
-		iut = new ScoresBoard();
+		iut = new ScoreBoard();
 	}
 	
 	@Test
