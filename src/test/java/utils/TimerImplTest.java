@@ -6,7 +6,7 @@ import org.junit.Test;
 import utils.TimerImpl;
 
 
-public class TimestampImplTest {
+public class TimerImplTest {
 	
 	private TimerImpl clock;
 	

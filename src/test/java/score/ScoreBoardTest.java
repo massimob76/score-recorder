@@ -7,7 +7,7 @@ import org.junit.Test;
 import score.ScoreBoard;
 
 
-public class ScoresTest {
+public class ScoreBoardTest {
 	
 	private ScoreBoard iut;
 	
